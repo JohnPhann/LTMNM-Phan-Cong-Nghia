@@ -1,10 +1,25 @@
-const http = require("node:http");
+const express = require('express');
+const path = require('path');
 
-let server = http.createServer((req, res) => {
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("Hello, world!");
+const app = express();
+const PORT = 3000;
+
+
+app.get('/cv', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'cv.html'));
 });
 
-server.listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+
+app.get('/', (req, res) => {
+  res.send('<h1>Welcome to the Home Page!</h1>');
+});
+
+
+app.get('*', (req, res) => {
+  res.status(404).send('<h1>404 - Page Not Found</h1>');
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
