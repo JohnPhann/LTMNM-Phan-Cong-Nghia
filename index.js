@@ -11,7 +11,19 @@ app.get('/cv', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.send('<h1>Welcome to the Home Page!</h1>');
+ res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+});
+
+app.get('/product', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'product.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'contact.html'));
 });
 
 
@@ -23,3 +35,4 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
