@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Sản Phẩm</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        select { padding: 5px; margin-bottom: 10px; }
+    </style>
+    <script>
+        function filterProducts() {
+            const categoryId = document.getElementById("categoryFilter").value;
+            window.location.href = "/products?category_id=" + categoryId;
+        }
+    </script>
+</head>
+<body>
+    <h1>Danh Sách Sản Phẩm</h1>
+
+    <!-- Bộ lọc theo danh mục -->
+    <label for="categoryFilter">Lọc theo danh mục:</label>
+   <select id="categoryFilter" onchange="filterProducts()">
+    <option value="">Tất cả</option>
+    <% categories.forEach(category => { %>
+        <option value="<%= category.id %>" <%= selectedCategory == category.id ? "selected" : "" %> >
+            <%= category.name %>
+        </option>
+    <% }) %>
+</select>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Mô Tả</th>
+                <th>Giá</th>
+                <th>Số Lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% products.forEach(product => { %>
+                <tr>
+                    <td><%= product.id %></td>
+                    <td><%= product.name %></td>
+                    <td><%= product.description %></td>
+                    <td><%= product.price.toLocaleString("vi-VN") %> VND</td>
+                    <td><%= product.stock %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

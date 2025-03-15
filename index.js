@@ -1,38 +1,29 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3008;
 
 
-app.get('/cv', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'cv.html'));
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
-app.get('/', (req, res) => {
- res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+app.set('views', path.join(__dirname, 'src', 'views'));  // ✅ Chỉnh lại đúng thư mục views
+app.set('view engine', 'ejs');
 
-app.get('/profile', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
-});
+// Import router
+const homeRoutes = require('./src/routes/homeRoutes');
+const userRoutes = require('./src/routes/userRoutes'); // ✅ Đảm bảo file đúng tên
+const productRoutes = require('./src/routes/productRoutes');
 
-app.get('/product', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'product.html'));
-});
+// Sử dụng router
+app.use('/', homeRoutes);
+app.use('/users', userRoutes);
+app.use('/products', productRoutes);
 
-app.get('/contact', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'contact.html'));
-});
-
-
-app.get('*', (req, res) => {
-  res.status(404).send('<h1>404 - Page Not Found</h1>');
-});
-
-// Start the server
+// Chạy server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`✅ Server is running at http://localhost:${PORT}`);
 });
-
