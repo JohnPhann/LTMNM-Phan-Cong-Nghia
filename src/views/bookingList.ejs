@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách lịch đặt chỗ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.js"></script>
+</head>
+<body>
+    <div style="padding: 20px; max-width: 900px; margin: auto;">
+        <h1 style="text-align: center;">Danh sách lịch đặt chỗ</h1>
+
+       
+  <% if (messages && (messages.success || messages.error)) { %>
+    <div id="alert-container" style="margin-bottom: 15px;">
+        <% if (messages.success) { %>
+            <div class="ant-alert alert-box ant-alert-success" role="alert">
+                <%= messages.success %>
+            </div>
+        <% } %>
+
+        <% if (messages.error) { %>
+            <div class="ant-alert alert-box ant-alert-error" role="alert">
+                <%= messages.error %>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll(".alert-box").forEach(alert => {
+                alert.style.transition = "opacity 0.5s ease";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 1000);
+    </script>
+<% } %>
+
+       
+        <div style="margin-bottom: 20px; text-align: right;">
+            <a href="/bookings/create">
+                <button class="ant-btn ant-btn-primary">+ Tạo đặt chỗ mới</button>
+            </a>
+        </div>
+
+        <!-- Bảng danh sách đặt chỗ -->
+        <table class="ant-table" style="width: 100%; border-radius: 10px; overflow: hidden;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên khách hàng</th>
+                    <th>Ngày</th>
+                    <th>Giờ</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% bookings.forEach(booking => { %>
+                    <tr>
+                        <td><%= booking.id %></td>
+                        <td><%= booking.customerName %></td>
+                        <td><%= booking.date %></td>
+                        <td><%= booking.time %></td>
+                        <td>
+                            <span class="ant-tag 
+                                <%= booking.status === 'Pending' ? 'ant-tag-warning' : '' %>
+                                <%= booking.status === 'Cancelled' ? 'ant-tag-red' : '' %>
+                                <%= booking.status === 'Confirmed' ? 'ant-tag-green' : '' %>">
+                                <%= booking.status %>
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/bookings/edit/<%= booking.id %>">
+                                <button class="ant-btn ant-btn-link">✏️ Sửa</button>
+                            </a>
+                            <form action="/bookings/cancel/<%= booking.id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="ant-btn ant-btn">🗑️ Hủy</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
