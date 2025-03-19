@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt chỗ mới</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
+</head>
+<body>
+    <div style="padding: 20px; max-width: 500px; margin: auto;">
+        <h1>Đặt chỗ mới</h1>
+
+        <form action="/bookings/create" method="POST" class="ant-form">
+            <div class="ant-form-item">
+                <label class="ant-form-item-label">Tên khách hàng:</label>
+                <input type="text" name="customerName" required class="ant-input"/>
+            </div>
+
+            <div class="ant-form-item">
+                <label class="ant-form-item-label">Ngày:</label>
+                <input type="date" name="date" required class="ant-input"/>
+            </div>
+
+            <div class="ant-form-item">
+                <label class="ant-form-item-label">Giờ:</label>
+                <input type="time" name="time" required class="ant-input"/>
+            </div>
+
+            <button type="submit" class="ant-btn ant-btn-primary" style="width: 100%;">Đặt chỗ</button>
+        </form>
+
+        <a href="/bookings">
+            <button class="ant-btn ant-btn-default" style="margin-top: 10px; width: 100%;">Quay lại</button>
+        </a>
+    </div>
+</body>
+</html>
