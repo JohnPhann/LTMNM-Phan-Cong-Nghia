@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm danh mục mới</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
+</head>
+<body>
+    <div style="padding: 20px; max-width: 500px; margin: auto;">
+        <h1>Thêm danh mục mới</h1>
+
+        <form action="/category/create" method="POST" class="ant-form">
+            <div class="ant-form-item">
+                <label class="ant-form-item-label">Tên danh mục:</label>
+                <input type="text" name="name" required class="ant-input"/>
+            </div>
+
+            <div class="ant-form-item">
+                <label class="ant-form-item-label">Mô tả (tùy chọn):</label>
+                <textarea name="description" class="ant-input" rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="ant-btn ant-btn-primary" style="width: 100%;">Thêm danh mục</button>
+        </form>
+
+        <a href="/category">
+            <button class="ant-btn ant-btn-default" style="margin-top: 10px; width: 100%;">Quay lại</button>
+        </a>
+    </div>
+</body>
+</html>
