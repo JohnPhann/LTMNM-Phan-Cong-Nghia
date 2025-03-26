@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách danh mục</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.23.0/antd.min.js"></script>
+    <style>
+        .container { padding: 20px; max-width: 900px; margin: auto; }
+        .title { text-align: center; }
+        .alert-container { margin-bottom: 15px; }
+        .action-bar { margin-bottom: 20px; text-align: right; }
+        .table { width: 100%; border-radius: 10px; overflow: hidden; }
+        .fade-out { transition: opacity 0.5s ease; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Danh sách danh mục</h1>
+            <!-- <script>
+                const fadeOutAlerts = () => {
+                    const alerts = document.querySelectorAll(".alert-box");
+                    if (alerts.length > 0) {
+                        setTimeout(() => {
+                            alerts.forEach(alert => {
+                                alert.classList.add("fade-out");
+                                alert.style.opacity = "0";
+                                setTimeout(() => alert.remove(), 500);
+                            });
+                        }, 1000);
+                    }
+                };
+                window.onload = fadeOutAlerts;
+            </script> -->
+
+
+        <!-- Nút tạo danh mục mới -->
+        <div class="action-bar">
+            <a href="/category/create">
+                <button class="ant-btn ant-btn-primary">+ Tạo danh mục mới</button>
+            </a>
+        </div>
+
+        <!-- Bảng danh sách danh mục -->
+        <table class="ant-table table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên danh mục</th>
+                    <th>Mô tả</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% category.forEach(category => { %>
+                    <tr>
+                        <td><%= category.id %></td>
+                        <td><%= category.name %></td>
+                        <td><%= category.description || "Không có mô tả" %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
