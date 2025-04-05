@@ -9,29 +9,23 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid black; padding: 10px; text-align: left; }
         th { background-color: #f2f2f2; }
-        select { padding: 5px; margin-bottom: 10px; }
+        select, button { padding: 5px; margin: 5px; }
     </style>
-    <script>
-        function filterProducts() {
-            const categoryId = document.getElementById("categoryFilter").value;
-            window.location.href = "/products?category_id=" + categoryId;
-        }
-    </script>
 </head>
 <body>
     <h1>Danh Sách Sản Phẩm</h1>
-
-    <!-- Bộ lọc theo danh mục -->
-    <label for="categoryFilter">Lọc theo danh mục:</label>
-   <select id="categoryFilter" onchange="filterProducts()">
-    <option value="">Tất cả</option>
-    <% categories.forEach(category => { %>
-        <option value="<%= category.id %>" <%= selectedCategory == category.id ? "selected" : "" %> >
-            <%= category.name %>
-        </option>
-    <% }) %>
-</select>
-
+    <a href="/products/create"><button>Thêm Sản Phẩm</button></a>
+    <form action="/products" method="GET">
+        <label for="categoryFilter">Lọc theo danh mục:</label>
+        <select id="categoryFilter" name="category_id" onchange="this.form.submit()">
+            <option value="">Tất cả</option>
+            <% categories.forEach(category => { %>
+                <option value="<%= category._id %>" <%= selectedCategory == category._id ? "selected" : "" %>>
+                    <%= category.name %>
+                </option>
+            <% }) %>
+        </select>
+    </form>
 
     <table>
         <thead>
@@ -41,16 +35,22 @@
                 <th>Mô Tả</th>
                 <th>Giá</th>
                 <th>Số Lượng</th>
+                <th>Danh Mục</th>
+                <th>Hành Động</th>
             </tr>
         </thead>
         <tbody>
             <% products.forEach(product => { %>
                 <tr>
-                    <td><%= product.id %></td>
+                    <td><%= product._id %></td>
                     <td><%= product.name %></td>
                     <td><%= product.description %></td>
                     <td><%= product.price.toLocaleString("vi-VN") %> VND</td>
                     <td><%= product.stock %></td>
+                    <td><%= product.category.name %></td>
+                    <td>
+                        <a href="/products/edit/<%= product._id %>"><button>Sửa</button></a>
+                    </td>
                 </tr>
             <% }) %>
         </tbody>

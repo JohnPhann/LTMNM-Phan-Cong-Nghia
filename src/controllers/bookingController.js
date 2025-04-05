@@ -6,18 +6,7 @@ let bookingId = 1;
 
 const bookingController = {
    list: (req, res) => {
-    const successMessage = req.flash("success");
-    const errorMessage = req.flash("error");
-
-    const messages = {};
-    if (successMessage.length > 0) {
-        messages.success = successMessage[0];
-    }
-    if (errorMessage.length > 0) {
-        messages.error = errorMessage[0];
-    }
-
-    res.render("bookingList", { bookings, messages });
+    res.render("bookingList", { bookings });
     },
     createForm: (req, res) => {
         res.render("bookingCreate");
@@ -26,18 +15,14 @@ const bookingController = {
     const { customerName, date, time } = req.body;
 
     if (!customerName || !date || !time) {
-        req.flash("error", "Vui lòng nhập đầy đủ thông tin!");
         return res.redirect("/bookings/create");
     }
 
     const isDuplicate = bookings.some(b => b.date === date && b.time === time);
     if (isDuplicate) {
-        req.flash("error", "Lịch đã được đặt trước, vui lòng chọn thời gian khác!");
         return res.redirect("/bookings/create");
     }
     bookings.push({ id: bookings.length + 1, customerName, date, time, status: "Pending" });
-
-    req.flash("success", "Đặt chỗ thành công!");
     res.redirect("/bookings");
     },
     editForm: (req, res) => {
@@ -49,15 +34,13 @@ const bookingController = {
         console.log("Request Params:", req.params);
         let booking = bookings.find(b => b.id == +req.params.id);
          if (!booking) {
-            req.flash("error", "Không tìm thấy đặt chỗ!");
-            return res.status(404).send("Không tìm thấy đặt chỗ!");  // Prevents the error
+            return res.status(404).send("Không tìm thấy đặt chỗ!");
         }
         if (booking) {
             booking.customerName = customerName;
             booking.date = date;
             booking.time = time;
         }
-        req.flash("success", "Cập nhật thành công!");
         res.redirect("/bookings");
     },
     cancel: (req, res) => {
@@ -65,7 +48,6 @@ const bookingController = {
         if (booking) {
             booking.status = "Cancelled";
         }
-        req.flash("success", "Hủy thành công!");
         res.redirect("/bookings");
     }
 };

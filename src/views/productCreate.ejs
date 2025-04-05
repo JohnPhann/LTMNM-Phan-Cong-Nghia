@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Sản Phẩm</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-container { padding: 15px; border: 1px solid #ccc; }
+        input, select, button { padding: 5px; margin: 5px; display: block; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Thêm Sản Phẩm Mới</h1>
+    <div class="form-container">
+        <form action="/products/create" method="POST">
+            <input type="text" name="name" placeholder="Tên sản phẩm" value="<%= formData?.name || '' %>" required>
+            <input type="text" name="description" placeholder="Mô tả" value="<%= formData?.description || '' %>">
+            <input type="number" name="price" placeholder="Giá" step="0.01" min="0" value="<%= formData?.price || '' %>" required>
+            <input type="number" name="stock" placeholder="Số lượng" min="0" value="<%= formData?.stock || '' %>" required>
+            <select name="category" required>
+                <option value="">Chọn danh mục</option>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category._id %>" <%= formData?.category === category._id ? "selected" : "" %>>
+                        <%= category.name %>
+                    </option>
+                <% }) %>
+            </select>
+            <button type="submit">Thêm</button>
+            <a href="/products"><button type="button">Hủy</button></a>
+        </form>
+        <% if (error) { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+    </div>
+</body>
+</html>

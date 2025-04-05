@@ -9,34 +9,6 @@
 <body>
     <div style="padding: 20px; max-width: 900px; margin: auto;">
         <h1 style="text-align: center;">Danh sách lịch đặt chỗ</h1>
-
-       
-  <% if (messages && (messages.success || messages.error)) { %>
-    <div id="alert-container" style="margin-bottom: 15px;">
-        <% if (messages.success) { %>
-            <div class="ant-alert alert-box ant-alert-success" role="alert">
-                <%= messages.success %>
-            </div>
-        <% } %>
-
-        <% if (messages.error) { %>
-            <div class="ant-alert alert-box ant-alert-error" role="alert">
-                <%= messages.error %>
-            </div>
-        <% } %>
-    </div>
-
-    <script>
-        setTimeout(() => {
-            document.querySelectorAll(".alert-box").forEach(alert => {
-                alert.style.transition = "opacity 0.5s ease";
-                alert.style.opacity = "0";
-                setTimeout(() => alert.remove(), 500);
-            });
-        }, 1000);
-    </script>
-<% } %>
-
        
         <div style="margin-bottom: 20px; text-align: right;">
             <a href="/bookings/create">

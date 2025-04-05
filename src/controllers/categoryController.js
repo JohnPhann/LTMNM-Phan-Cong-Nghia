@@ -1,60 +1,114 @@
 const Category = require("../model/category");
 
 const categoryController = {
+  
+  list: async (req, res) => {
+    try {
+      const categories = await Category.find();
+      res.render("categoryList", { 
+        categories,
+        error: null 
+      });
+    } catch (error) {
+      res.render("categoryList", { 
+        categories: [],
+        error: "Lỗi khi lấy danh sách danh mục: " + error.message
+      });
+    }
+  },
 
-    list: async (req, res) => {
-        // const successMessage = req.flash("success");
-        // const errorMessage = req.flash("error");
 
-        // const messages = {};
-        // if (successMessage.length > 0) {
-        //     messages.success = successMessage[0];
-        // }
-        // if (errorMessage.length > 0) {
-        //     messages.error = errorMessage[0];
-        // }
+  createForm: (req, res) => {
+    res.render("categoryCreate", { 
+      formData: {}, 
+      error: null
+    });
+  },
 
-        try {
-            const category = await Category.find(); 
-            res.render("categoryList", { category });
-        } catch (error) {
-            res.status(500).send("Lỗi khi lấy danh sách danh mục: " + error.message);
+
+  create: async (req, res) => {
+    const { name, description } = req.body;
+
+    try {
+      if (!name || typeof name !== "string" || name.trim() === "") {
+        throw new Error("Vui lòng nhập tên danh mục hợp lệ!");
+      }
+
+      const trimmedName = name.trim();
+      const isDuplicate = await Category.findOne({ name: trimmedName });
+      if (isDuplicate) {
+        throw new Error("Tên danh mục đã tồn tại, vui lòng chọn tên khác!");
+      }
+
+      await Category.create({
+        name: trimmedName,
+        description: description || ""
+      });
+
+      res.redirect("/category");
+    } catch (error) {
+      res.render("categoryCreate", {
+        formData: req.body || {},
+        error: error.message
+      });
+    }
+  },
+
+  editForm: async (req, res) => {
+    try {
+      const category = await Category.findById(req.params.id);
+      if (!category) {
+        throw new Error("Danh mục không tồn tại!");
+      }
+      
+      res.render("categoryEdit", { 
+        category,
+        formData: category, 
+        error: null
+      });
+    } catch (error) {
+      res.redirect("/category");
+    }
+  },
+
+
+  edit: async (req, res) => {
+    const { name, description } = req.body;
+    const categoryId = req.params.id;
+
+    try {
+      const category = await Category.findById(categoryId);
+      if (!category) {
+        throw new Error("Danh mục không tồn tại!");
+      }
+
+      // Validation
+      if (!name || typeof name !== "string" || name.trim() === "") {
+        throw new Error("Vui lòng nhập tên danh mục hợp lệ!");
+      }
+
+      const trimmedName = name.trim();
+      if (trimmedName !== category.name) {
+        const isDuplicate = await Category.findOne({ name: trimmedName });
+        if (isDuplicate) {
+          throw new Error("Tên danh mục đã tồn tại, vui lòng chọn tên khác!");
         }
-    },
+      }
 
-    createForm: (req, res) => {
-        res.render("categoryCreate");
-    },
+      category.name = trimmedName;
+      category.description = description !== undefined ? description : category.description;
 
-   create: async (req, res) => {
-        const { name, description } = req.body;
-        console.log("Dữ liệu nhận được:", req.body); 
-
-        if (!name || typeof name !== "string" || name.trim() === "") {
-            // req.flash("error", "Vui lòng nhập tên danh mục hợp lệ!");
-            return res.redirect("/category/create");
-        }
-
-        try {
-            const trimmedName = name.trim();
-            const isDuplicate = await Category.findOne({ name: trimmedName });
-            if (isDuplicate) {
-                // req.flash("error", "Tên danh mục đã tồn tại, vui lòng chọn tên khác!");
-                return res.redirect("/category/create");
-            }
-
-            const newCategory = new Category({
-                name: trimmedName,
-                description: description || "",
-            });
-            await newCategory.save();
-
-            // req.flash("success", "Thêm danh mục thành công!");
-            res.redirect("/category");
-        } catch (error) {
-            res.status(500).send("Lỗi khi tạo danh mục: " + error.message);
-        }
-    },
+      await category.save();
+      res.redirect("/category");
+    } catch (error) {
+      const category = await Category.findById(categoryId);
+      res.render("categoryEdit", { 
+        category,
+        formData: req.body || category,
+        error: error.message
+      });
+    }
+  }
 };
 
 module.exports = categoryController;
